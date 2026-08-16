@@ -1,19 +1,26 @@
+// Import the Joplin API
 import joplin from 'api';
 
-joplin.plugins.register({
-	onStart: async function() {
-		// eslint-disable-next-line no-console
-		console.info('Hello world. Test plugin started!');
 
+joplin.plugins.register({
+
+    onStart: async function() {
 
         // Later, this is where you'll want to update the TOC
         async function updateTocView() {
             // Get the current note from the workspace.
             const note = await joplin.workspace.selectedNote();
 
+
             // Keep in mind that it can be `null` if nothing is currently selected!
             if (note) {
                 console.info('Note content has changed! New note is:', note);
+
+				const wordCount = note ? note.body.split(/\s+/).length : 0;
+				console.info('Word count:', wordCount);
+
+				
+
             } else {
                 console.info('No note is selected');
             }
@@ -34,6 +41,4 @@ joplin.plugins.register({
         updateTocView();
     },
 
-
-	},
 });
