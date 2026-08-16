@@ -1,7 +1,7 @@
 {
 	"manifest_version": 1,
 	"id": "de.naehmachinery.word-tracker",
-	"app_min_version": "3.6.14",
+	"app_min_version": "3.6",
 	"version": "1.0.0",
 	"name": "fowo\\'s word tracker",
 	"description": "a word tracker for joplin",
