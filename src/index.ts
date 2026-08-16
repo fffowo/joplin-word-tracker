@@ -9,33 +9,28 @@ joplin.plugins.register({
 		const panel = await joplin.views.panels.create('panel_wordcount');
 
 
-        // Later, this is where you'll want to update the TOC
+        // Update the TOC
         async function updateTocView() {
             // Get the current note from the workspace.
             const note = await joplin.workspace.selectedNote();
 
-			let counter = 0;
-
-            // Keep in mind that it can be `null` if nothing is currently selected!
             if (note) {
 
 				const body = note ? note.body.trim() : 0;
 				console.log('Note body:', body); // check the actual unformatted body 
 				
-				// TODO: formatting  
-				// const words = body.split([' ']); // returns array 
 				const words = body.split(/\s+/); // splits all whitespaces
 
 
-				let newCounter = words.length; 
+				let counter = words.length; 
 
-				console.log('Words:', newCounter);
+				console.log('Words:', counter);
 
 
 				// TODO 
 				let itemHtml = [];
 				itemHtml.push(`
-								Words: <b>${newCounter}</b>
+								Words: <b>${counter}</b>
 					`);
 
 				// Finally, insert all the headers in a container and set the webview HTML:
@@ -46,14 +41,10 @@ joplin.plugins.register({
 				`);
 
 
-
             } else {
                 console.info('No note is selected');
 
-				await joplin.views.panels.setHtml(panel, 'Please select a note to view the table of content');
-
             }
-
 
         }
 
