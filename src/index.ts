@@ -8,24 +8,24 @@ joplin.plugins.register({
 		// Create the panel object
 		const panel = await joplin.views.panels.create('panel_wordcount');
 
-
         // Update the TOC
         async function updateTocView() {
+            
             // Get the current note from the workspace.
-            const note = await joplin.workspace.selectedNote();
+            let note = await joplin.workspace.selectedNote();
+            let body = getNoteBody(note);
+
+            let counter = getWordCount(body);
+
+            console.log('Words:', counter);
 
             if (note) {
 
-				const body = note ? note.body.trim() : 0;
-				console.log('Note body:', body); // check the actual unformatted body 
-				
-				const words = body.split(/\s+/); // splits all whitespaces
-
-
-				let counter = words.length; 
-
-				console.log('Words:', counter);
-
+                if (note != joplin.workspace.selectedNote()) {
+                    note = await joplin.workspace.selectedNote();
+                    body = getNoteBody(note);
+                    counter = getWordCount(body);
+                }
 
 				// TODO 
 				let itemHtml = [];
@@ -39,6 +39,8 @@ joplin.plugins.register({
 						${itemHtml.join('\n')}
 					</div>
 				`);
+                // div class="spacer" unten
+                // class="note-title-info-group" oben 
 
 
             } else {
@@ -59,8 +61,23 @@ joplin.plugins.register({
             updateTocView();
         });
 
+        await joplin.workspace.onResourceChange(() => {
+            updateTocView();
+        });
+
         // Also update the TOC when the plugin starts
         updateTocView();
     },
 
 });
+
+function getWordCount(noteBody: string): number {
+
+    const words = noteBody.split(/\s+/); // splits all whitespaces
+
+    return words.length; 
+}
+
+function getNoteBody(note: any): string {
+    return note ? note.body.trim() : '';
+}
